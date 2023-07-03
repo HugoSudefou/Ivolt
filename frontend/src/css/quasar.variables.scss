@@ -1,0 +1,50 @@
+// Quasar SCSS (& Sass) Variables
+// --------------------------------------------------
+// To customize the look and feel of this app, you can override
+// the Sass/SCSS variables found in Quasar's source Sass/SCSS files.
+
+// Check documentation for full list of Quasar variables
+
+// Your own variables (that are declared here) and Quasar's own
+// ones will be available out of the box in your .vue/.scss/.sass files
+
+// It's highly recommended to change the default colors
+// to match your app's branding.
+// Tip: Use the "Theme Builder" on Quasar's documentation website.
+
+// quasar.variables.scss
+
+//généré
+//$beige: #d3c4ac
+//$noir: #0c0c09
+//$jaune: #eed022
+//$bleu: #73aaaa
+//$marron: #5c4c1c
+//
+//pick à la main (pipette sur le logo)
+//$beige: #dacda2
+//$noir: #0c0c09
+$jaune-ivolt: #fedd20;
+//$bleu: #74a8ab  // plus clair #77ced3
+//$marron: #b4a07b
+
+// Couleurs basées sur le logo
+$primary: #009dff; // Bleu vif
+$secondary: #ff6a00; // Orange
+$accent: #ffd600; // Jaune
+
+// Couleurs sombres
+$dark: #333333; // Noir
+$dark-page: #424242; // Gris foncé
+
+// Couleurs supplémentaires
+$positive: #00c853; // Vert
+$negative: #ff0000; // Rouge
+$info: #2979ff; // Bleu
+$warning: #ff9100; // Orange
+
+// Autres variables de couleur
+$card-bg-color: $dark-page; // Couleur de fond de la carte
+$text-color: $primary; // Couleur du texte
+$border-radius: 4px; // Rayon des coins des éléments
+$button-text-color: $dark; // Couleur du texte des boutons

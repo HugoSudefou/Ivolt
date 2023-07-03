@@ -1,0 +1,19 @@
+.redirection-page {
+  background-color: #f2f2f2;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loader-text {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #555555;
+}
