@@ -21,6 +21,11 @@ export default {
 <style lang="scss">
 .dark-mode {
   background-color: $dark !important;
-  color: $jaune-ivolt !important;;
+  color: $jaune-ivolt !important;
+
+
+  .q-field--dark .q-field__native, .q-field--dark .q-field__prefix, .q-field--dark .q-field__suffix, .q-field--dark .q-field__input {
+    color: $jaune-ivolt !important;
+  }
 }
 </style>

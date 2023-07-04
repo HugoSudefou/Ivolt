@@ -1,0 +1,35 @@
+Page Dashboard
+Page Data Batterie (ou un composant à voir)
+Page Station
+Page Dispatch
+Page Livraison
+Page Contrat Entreprise
+Page CA
+Page Administration (acces private au CEO + autre)
+
+
+Composant :
+
+InAndOut Stock entreprise
+Suivi InAndOut
+Stock individuelle
+Gestion du stock
+
+Poubelle
+
+Savoir ce qu'on doit faire ("Je dois voir avec les autres pour :")
+
+Champ d'accumulateur
+
+CA Individuelle
+Calculatrice CA : Voir pour les deux si on le fait en 1 ou 2 component
+
+Date de mise à jour du CA Total
+Meilleur CA IVolt
+CA Ivolt comprenant : - CA d'IVolt semaine précédente
+                      - CA d'IVolt cette semaine
+                      - Pour faire mieux il manque
+
+Modification Dispatch : prendre en compte le ZIP
+Safe Braquage
+

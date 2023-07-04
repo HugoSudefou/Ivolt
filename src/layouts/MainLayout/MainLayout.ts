@@ -4,14 +4,40 @@ import UserModalComponent from "components/modal/UserModalComponent/UserModalCom
 import {sessionStorageService} from "boot/iv-api";
 import {useRouter} from "vue-router";
 import {useDarkModeStore} from "stores/dark-mode";
+import EssentialLink from "components/common/EssentialLinkComponent/EssentialLinkComponent.vue";
 
+const linksList = [
+  {
+    title: 'Home',
+    caption: 'quasar.dev',
+    icon: 'home',
+    link: ''
+  },
+  {
+    title: 'Test',
+    caption: 'test',
+    icon: 'test',
+    link: '/test'
+  },
+]
+
+const linksListAdmin = [
+  {
+    title: 'AdminHome',
+    caption: 'quasar.dev',
+    icon: 'home',
+    link: '/adminHome'
+  },
+]
 export default defineComponent({
   name: 'MainLayout',
-    components: {UserModalComponent},
+    components: {EssentialLink, UserModalComponent},
   setup() {
+    const version = process.env.VERSION_APPLI;
     const router = useRouter();
     const leftDrawerOpen = ref(false);
-
+    const essentialLinks = ref(linksList);
+    const essentialAdminLinks = ref(linksListAdmin);
     const userStore = useUserStore()
     const darkModeStore = useDarkModeStore()
     const userProfileModalVisible = ref(false)
@@ -31,12 +57,17 @@ export default defineComponent({
 
     return {
       isDarkMode: computed(() => darkModeStore.isDarkMode),
-      logout,
+      version,
+      essentialLinks,
+      essentialAdminLinks,
       userStore,
-      openUserProfileModal,
       userProfileModalVisible,
-      toggleLeftDrawer,
       leftDrawerOpen,
+      logout,
+      openUserProfileModal,
+      toggleLeftDrawer,
+      drawer: ref(false),
+      miniState: ref(true)
     };
   },
 });

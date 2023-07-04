@@ -1,8 +1,8 @@
 <template>
-  <div class="redirection-page">
+  <div :class="{ 'dark-mode': isDarkMode }" class="redirection-page">
     <div class="loader">
       <Loader v-if="true" />
-      <div class="loader-text">{{ textToDisplay }}</div>
+      <div>{{ textToDisplay }}</div>
     </div>
   </div>
 </template>

@@ -1,6 +1,8 @@
-# frontend (@ivolt/frontend)
+# Ivolt
 
-Le front de la compta d'IVolt
+Ce projet est une petite application web pour faire la comptabilité de l'entreprise I-Volt sur le serveur GTA RP : 21 JumpClick
+
+Ce projet est fait en Quasar 2.6.0 utilisant Firebase comme base de données et autre
 
 ## Install the dependencies
 ```bash

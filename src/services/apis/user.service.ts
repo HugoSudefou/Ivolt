@@ -1,6 +1,6 @@
-import {doc, DocumentData, getDocs, query as _query, QuerySnapshot, where,} from 'firebase/firestore';
+import {doc,} from 'firebase/firestore';
 import {AbstractFirebaseService} from 'src/services/apis/abstract-firebase.service';
-import {IUserDto, WhereFirestore} from "src/common/dtos";
+import {IUserDto} from "src/common/dtos";
 import {convertUserToIUserDto} from "src/common/converters/firebase-dto-converters";
 import {WorkDone} from "src/common/utils";
 import {MessageEnum} from "src/common/enums/message.enum";
@@ -21,8 +21,10 @@ export class UserService extends AbstractFirebaseService<IUserDto> {
   public async getOrCreateUserByUsernameDiscord(usernameDiscord: string, avatar: string, firstName: string, lastName: string, refreshToken: string): Promise<WorkDone<IUserDto | null>> {
     const querySnapshot = await this._queryByField({field: 'usernameDiscord', operator: '==', value: usernameDiscord});
     if (!querySnapshot.empty) {
-      const user = await this.mergeReferencedData(querySnapshot.docs[0].data() as IUserDto, 'rang');
-      if(user.active) {
+      let user = await this.mergeReferencedData(querySnapshot.docs[0].data() as IUserDto, 'rang');
+      user = await this.mergeReferencedData(user, 'dispatch');
+      user.id = querySnapshot.docs[0].id;
+      if (user.active) {
         return WorkDone.buildOk(user, MessageEnum.IS_OK_GET_USER_BY_USERNAME_DISCORD);
       }
     }
@@ -32,17 +34,27 @@ export class UserService extends AbstractFirebaseService<IUserDto> {
       lastName: lastName,
       firstName: firstName,
       avatar: avatar,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       rang: doc(firebaseDatabase, '/rang/ADJOINT'),
       phoneNumber: '',
-      dispatch: '',
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      dispatch: doc(firebaseDatabase, '/dispatch/DISPONIBLE'),
       usernameDiscord: usernameDiscord,
       refreshToken: refreshToken,
     })
 
-    const queryCreateUserSnapshot = await this._queryByField({field: 'usernameDiscord', operator: '==', value: usernameDiscord});
+    const queryCreateUserSnapshot = await this._queryByField({
+      field: 'usernameDiscord',
+      operator: '==',
+      value: usernameDiscord
+    });
     if (!queryCreateUserSnapshot.empty) {
-      const createUser = await this.mergeReferencedData(queryCreateUserSnapshot.docs[0].data() as IUserDto, 'rang');
-      if(createUser.active) {
+      let createUser = await this.mergeReferencedData(queryCreateUserSnapshot.docs[0].data() as IUserDto, 'rang');
+      createUser = await this.mergeReferencedData(createUser, 'dispatch');
+      createUser.id = queryCreateUserSnapshot.docs[0].id;
+      if (createUser.active) {
         return WorkDone.buildOk(createUser, MessageEnum.IS_OK_CREATE_USER_BY_USERNAME_DISCORD);
       }
     }
@@ -56,7 +68,11 @@ export class UserService extends AbstractFirebaseService<IUserDto> {
    * @param usernameDiscord
    */
   public async getUserByUsernameDiscord(usernameDiscord: string): Promise<WorkDone<IUserDto | null>> {
-    const querySnapshot = await this._queryByFields([{field: 'usernameDiscord', operator: '==', value: usernameDiscord}, {field: 'active', operator: '==', value: true}]);
+    const querySnapshot = await this._queryByFields([{
+      field: 'usernameDiscord',
+      operator: '==',
+      value: usernameDiscord
+    }, {field: 'active', operator: '==', value: true}]);
     if (!querySnapshot.empty) {
       return WorkDone.buildOk(convertUserToIUserDto(querySnapshot.docs[0].data()), MessageEnum.IS_OK_GET_USER_BY_USERNAME_DISCORD);
     }
@@ -68,38 +84,45 @@ export class UserService extends AbstractFirebaseService<IUserDto> {
    */
   public async getAllUser(): Promise<WorkDone<IUserDto[]>> {
     const allUser = await this.getAll();
+    console.log('***************************')
+    console.log('************allUser***************')
+    console.log(allUser)
+    console.log('***************************')
     if (allUser.length > 0) {
-      return WorkDone.buildOk(allUser.map(convertUserToIUserDto), MessageEnum.IS_OK_GET_ALL_USER);
+      const newAllUser: IUserDto[] = [];
+      for await (const user of allUser) {
+        console.log('***************************')
+        console.log('************user***************')
+        console.log(user)
+        console.log('***************************')
+        let newUser = await this.mergeReferencedData(user, 'rang');
+        newUser = await this.mergeReferencedData(newUser, 'dispatch');
+        console.log('***************************')
+        console.log('*************newUser**************')
+        console.log(newUser)
+        console.log('***************************')
+        newAllUser.push(newUser);
+      }
+      return WorkDone.buildOk(newAllUser.map(convertUserToIUserDto), MessageEnum.IS_OK_GET_ALL_USER);
     }
     return WorkDone.buildError(MessageEnum.IS_NOK_GET_ALL_USER);
   }
 
   /**
-   * Permet de faire une requête sur firebase (sur la table user uniquement) avec un seul champ dans le where
-   * @param whereData {WhereFirestore}
+   * Function qui récupère sur firebaseun ustilisateur via son id
    */
-  private async _queryByField(
-    whereData: WhereFirestore
-  ): Promise<QuerySnapshot<DocumentData>> {
-    const collectionRef = this.getCollectionRef();
-    const query = _query(collectionRef, where(whereData.field, whereData.operator, whereData.value));
-    return await getDocs<DocumentData>(query);
+  public async getById(id: string): Promise<WorkDone<IUserDto>> {
+    let user = await this.get(id);
+    if (user) {
+      user = await this.mergeReferencedData(user, 'rang');
+      user = await this.mergeReferencedData(user, 'dispatch');
+      user.id = id;
+      return WorkDone.buildOk(convertUserToIUserDto(user), MessageEnum.IS_OK_GET_ALL_USER);
+    }
+    return WorkDone.buildError(MessageEnum.IS_NOK_GET_ALL_USER);
   }
 
-  /**
-   * Permet de faire une requête sur firebase (sur la table user uniquement) avec un plusieurs champs dans le where
-   * @param whereData {WhereFirestore[]}
-   * @private
-   */
-  private async _queryByFields(
-    whereData: WhereFirestore[]
-  ): Promise<QuerySnapshot<DocumentData>> {
-    const collectionRef = this.getCollectionRef();
-    const conditions = whereData.map((whereClause) => {
-      return where(whereClause.field, whereClause.operator, whereClause.value);
-    });
-    const composedQuery = _query(collectionRef, ...conditions);
-
-    return await getDocs<DocumentData>(composedQuery);
+  public startListeningForUsers(callback: (users: IUserDto[]) => void): () => void {
+    return this.onSnapshot(callback);
   }
 }

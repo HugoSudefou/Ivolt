@@ -1,14 +1,15 @@
-import {IRangDto} from "src/common/dtos/firebase.dto";
+import {IDispatchDto, IRangDto} from "src/common/dtos/firebase.dto";
 import {DocumentData, DocumentReference} from "firebase/firestore";
 
 export interface IUserDto {
+  id: string;
   active: boolean;
   avatar: string;
-  dispatch: string;
+  dispatch: IDispatchDto;
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  rang: IRangDto | DocumentReference<DocumentData>;
+  rang: IRangDto;
   usernameDiscord: string;
   refreshToken: string;
 }

@@ -1,6 +1,5 @@
-import { useUserStore } from 'stores/user'
+import {useUserStore} from 'stores/user'
 import {IUserDto} from "src/common/dtos";
-import {Store} from "pinia";
 
 export class SessionStorageService {
   static initNewTabStorage () {
@@ -13,12 +12,6 @@ export class SessionStorageService {
 
   public isConnected (): boolean {
     return localStorage.getItem('connected') !== null && localStorage.getItem('connected') === 'true';
-    /*if(isConnected && !useUserStore().updated) {
-      const user = this.getIvUserData();
-      if(user) {
-        useUserStore().setUser(user)
-      }
-    }*/
   }
 
   public getIvUserData (): IUserDto | null {
@@ -47,6 +40,7 @@ export class SessionStorageService {
     const data = this.getIvUserData()
 
     const ivUserData: IUserDto = {
+      id: user.id ?? data?.id,
       active: user.active ?? data?.active,
       avatar: user.avatar ?? data?.avatar,
       rang: user.rang ?? data?.rang,

@@ -7,14 +7,14 @@
     >
     </q-btn>
 
+    <q-btn
+    label="Ouvrir la palette"
+    @click="openPalette = !openPalette"
+    >
+    </q-btn>
+
     <div>
-      --------------------<br>
-      --------------------<br>
-
       <InAndOutStock />
-
-      --------------------<br>
-      --------------------<br>
     </div>
 
   </q-page>

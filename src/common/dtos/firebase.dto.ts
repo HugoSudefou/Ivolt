@@ -7,3 +7,8 @@ export interface WhereFirestore {
 export interface IRangDto {
   label: string;
 }
+
+export interface IDispatchDto {
+  label: string;
+  color: string
+}

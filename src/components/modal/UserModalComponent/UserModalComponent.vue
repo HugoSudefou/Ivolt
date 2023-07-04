@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-btn flat round dense icon="person">
+    <q-btn flat round dense :style="{ color: user.dispatch.color }" icon="person">
       <q-menu
         :dark="isDarkMode"
         transition-show="jump-down"
@@ -8,9 +8,16 @@
       >
         <div>
           <div class="row items-center, q-pa-md">
-            <div class="q-pr-md">
-              <div class="text-h6">Settings</div>
-              <DarkModeComponent />
+            <div class="column q-pr-md">
+              <div>
+                <DarkModeComponent />
+              </div>
+              <div>
+                Rang: {{ rang }}
+              </div>
+              <div>
+                Dispatch: {{ dispatch }}
+              </div>
             </div>
 
             <q-separator vertical inset class="q-mx-lg" />

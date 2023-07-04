@@ -1,14 +1,20 @@
 import { defineStore } from 'pinia'
-import {IRangDto, IUserDto} from "src/common/dtos";
-import { onBeforeMount } from 'vue'
+import {IDispatchDto, IRangDto, IUserDto} from "src/common/dtos";
+import {userService} from "boot/iv-api";
 
 export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
+    id: '',
     active: false,
     avatar: '',
-    rang: '',
-    dispatch: '',
+    rang: {
+      label: '',
+      color: '',
+    },
+    dispatch: {
+      label: ''
+    },
     firstName: '',
     lastName: '',
     phoneNumber: '',
@@ -20,10 +26,15 @@ export const useUserStore = defineStore({
   actions: {
     clear () {
       this.$patch({
+        id: '',
         active: false,
         avatar: '',
-        rang: '',
-        dispatch: '',
+        rang: {
+          label: ''
+        },
+        dispatch: {
+          label: ''
+        },
         firstName: '',
         lastName: '',
         phoneNumber: '',
@@ -31,45 +42,31 @@ export const useUserStore = defineStore({
     },
     setUser(user: IUserDto) {
       this.$patch({
+        id: user.id,
         active: user.active,
         avatar: user.avatar,
-        rang: (user.rang as IRangDto).label,
-        dispatch: user.dispatch,
+        rang: (user.rang as IRangDto),
+        dispatch: (user.dispatch as IDispatchDto),
         firstName: user.firstName,
         lastName: user.lastName,
         phoneNumber: user.phoneNumber,
         updated: true,
       })
     },
-    onBeforeMount() {
+    async updateFromLocalStorage() {
       const storedData = localStorage.getItem('IVoltUser')
       if (storedData) {
         const parsedData = JSON.parse(storedData)
-        this.setUser(parsedData as IUserDto) // Utilisez votre action pour mettre à jour les données du store
-      }
-    },
-    onUnmounted() {
-      const stateData = JSON.stringify(this.getState) // Convertit l'état du store en JSON
-      localStorage.setItem('IVoltUser', stateData) // Enregistre les données dans le localStorage
-    },
-    updateFromLocalStorage() {
-      const storedData = localStorage.getItem('IVoltUser')
-      if (storedData) {
-        const parsedData = JSON.parse(storedData)
-        this.setUser(parsedData)
+        const test = await userService.getById(parsedData.id);
+        console.log('---------test---------')
+        console.log(test)
+        console.log('---------test---------')
+        if(test.isOk && test.data) {
+          this.setUser(test.data)
+        } else {
+          this.setUser(parsedData)
+        }
       }
     },
   },
-
-/*  onBeforeMount() {
-    const storedData = localStorage.getItem('IVoltUser')
-    if (storedData) {
-      const parsedData = JSON.parse(storedData)
-      this.setUser(parsedData as IUserDto) // Utilisez votre action pour mettre à jour les données du store
-    }
-  },
-  onUnmounted() {
-    const stateData = JSON.stringify(this.getState()) // Convertit l'état du store en JSON
-    localStorage.setItem(STORAGE_KEY, stateData) // Enregistre les données dans le localStorage
-  },*/
 })

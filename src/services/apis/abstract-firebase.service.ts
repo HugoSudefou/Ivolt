@@ -11,9 +11,13 @@ import {
   UpdateData,
   WithFieldValue,
   CollectionReference,
-  getDocs,
+  getDocs, QuerySnapshot, DocumentData, query as _query, where,
 } from 'firebase/firestore';
 import { firebaseDatabase } from 'boot/iv-api';
+import {WhereFirestore} from "src/common/dtos";
+import {WorkDone} from "src/common/utils";
+import {displayNotification} from "src/services/common/notification.service";
+import {NotificationStatusEnum} from "src/common/enums";
 
 export abstract class AbstractFirebaseService<T> {
   protected abstract collectionPath: string;
@@ -39,43 +43,13 @@ export abstract class AbstractFirebaseService<T> {
     }
   }
 
-  protected async getWithReference(id: string, referenceField: string): Promise<T | null> {
-    console.log('referenceField : ', referenceField)
-    const docRef = this.getDocumentRef(id);
-    console.log('docRef : ', docRef)
-    const docSnap = await getDoc(docRef);
-    console.log('docSnap : ', docSnap)
-
-    if (docSnap.exists()) {
-      const data = docSnap.data() as T;
-      console.log('data : ', data)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      console.log('data[referenceField] : ', data[referenceField])
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const referencedDocRef = doc(data[referenceField]) as DocumentReference;
-      console.log('referencedDocRef : ', referencedDocRef)
-      const referencedDocSnap = await getDoc(referencedDocRef);
-      console.log('referencedDocSnap : ', referencedDocSnap)
-
-      if (referencedDocSnap.exists()) {
-        const referencedData = referencedDocSnap.data();
-        console.log('referencedData : ', referencedData)
-        // Merge referenced data into the original document data
-        return { ...data, [referenceField]: referencedData };
-      }
-    }
-
-    return null;
-  }
-
   protected async getAll(): Promise<T[]> {
     const collectionRef = this.getCollectionRef();
     const querySnapshot = await getDocs(collectionRef);
     const data: T[] = [];
     querySnapshot.forEach((doc) => {
-      data.push(doc.data() as T);
+      const docWithId = { ...doc.data(), id: doc.id }
+      data.push(docWithId as T);
     });
     return data;
   }
@@ -134,4 +108,69 @@ export abstract class AbstractFirebaseService<T> {
 
     return data;
   }
+
+  /**
+   * Permet de faire une requête sur firebase (sur la table user uniquement) avec un seul champ dans le where
+   * @param whereData {WhereFirestore}
+   */
+  protected async _queryByField(
+    whereData: WhereFirestore
+  ): Promise<QuerySnapshot<T>> {
+    const collectionRef = this.getCollectionRef();
+    const query = _query(collectionRef, where(whereData.field, whereData.operator, whereData.value));
+    return await getDocs<T>(query);
+  }
+
+  /**
+   * Permet de faire une requête sur firebase (sur la table user uniquement) avec un plusieurs champs dans le where
+   * @param whereData {WhereFirestore[]}
+   * @private
+   */
+  protected async _queryByFields(
+    whereData: WhereFirestore[]
+  ): Promise<QuerySnapshot<T>> {
+    const collectionRef = this.getCollectionRef();
+    const conditions = whereData.map((whereClause) => {
+      return where(whereClause.field, whereClause.operator, whereClause.value);
+    });
+    const composedQuery = _query(collectionRef, ...conditions);
+
+    return await getDocs<T>(composedQuery);
+  }
+
+  protected _catchHandler<T>(wd: WorkDone<T>): WorkDone<T> | Promise<WorkDone<T>> {
+    let message = wd.error?.message ?? 'Unknown Error (2)'
+    if (wd.error) {
+      message = wd.error.message as string
+    }
+    displayNotification(NotificationStatusEnum.FAILURE, message)
+    return WorkDone.buildError<T>(message)
+  }
+
+  protected _thenHandler<T>(wd: WorkDone<T>): WorkDone<T> | Promise<WorkDone<T>> {
+    // Check if the response isOK
+    if ( wd.isOk && wd.data) {
+      if (wd.successMessage) {
+        displayNotification(NotificationStatusEnum.SUCCESS, wd.successMessage)
+      }
+      if (wd.warningMessage) {
+        displayNotification(NotificationStatusEnum.WARNING, wd.warningMessage)
+      }
+      return wd
+
+    } else if (wd.data && wd.error) {
+      // In case of functional error, display an error message
+      let message: string = wd.error.message || 'Unknown Error'
+      const logRef = wd.error.logRef
+      if (logRef) {
+        message = message.concat(` - logRef: ${logRef}`)
+      }
+
+      displayNotification(NotificationStatusEnum.FAILURE, message)
+      return WorkDone.buildError<T>(message)
+    } else {
+      return WorkDone.buildError<T>('Unknown Error (1)')
+    }
+  }
+
 }

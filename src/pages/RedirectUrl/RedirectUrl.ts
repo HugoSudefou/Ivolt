@@ -1,4 +1,4 @@
-import {defineComponent, onMounted, ref} from 'vue';
+import {computed, defineComponent, onMounted, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import {exchangeCodeForToken, getUserGuilds, isUserHasRoleIVolt} from 'src/services/apis/discord.service';
 import {sessionStorageService, userService} from "boot/iv-api";
@@ -6,6 +6,7 @@ import {useUserStore} from "stores/user";
 import {displayNotification} from "src/services/common/notification.service";
 import {NotificationStatusEnum} from "src/common/enums";
 import Loader from "components/common/LoaderComponent/LoaderComponent.vue";
+import {useDarkModeStore} from "stores/dark-mode";
 
 export default defineComponent({
   name: 'RedirectUrl',
@@ -14,6 +15,7 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const userStore = useUserStore();
+    const darkModeStore = useDarkModeStore();
     const textToDisplay = ref<string>('Redirection en cours...');
 
     async function getTokenFromCode(code: string) {
@@ -61,6 +63,7 @@ export default defineComponent({
       }
     });
     return {
+      isDarkMode: computed(() => darkModeStore.isDarkMode),
       textToDisplay
     };
   },

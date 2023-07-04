@@ -1,19 +1,15 @@
-import { boot } from 'quasar/wrappers';
-import { FirebaseApp, initializeApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
-import { createPinia } from 'pinia';
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-} from 'axios';
-import { useSpinnerStore } from 'stores/spinner';
+import {boot} from 'quasar/wrappers';
+import {FirebaseApp, initializeApp} from 'firebase/app';
+import {Firestore, getFirestore} from 'firebase/firestore';
+import {createPinia} from 'pinia';
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse,} from 'axios';
+import {useSpinnerStore} from 'stores/spinner';
 import {ApiService} from "src/services/apis/api.service";
 import {SessionStorageService} from "src/services/common/session-storage.service";
 import {UserService} from "src/services/apis/user.service";
 import {useUserStore} from "stores/user";
 import {useDarkModeStore} from "stores/dark-mode";
+import {StockService} from "src/services/apis/stock.service";
 
 let axiosInstance: AxiosInstance;
 let apiService: ApiService;
@@ -22,6 +18,7 @@ let firebaseApp: FirebaseApp;
 
 let sessionStorageService: SessionStorageService
 let userService: UserService;
+let stockService: StockService;
 
 const firebaseConfig = {
   apiKey: process.env.YOUR_API_KEY,
@@ -57,15 +54,13 @@ const initAxiosInstance = () => {
   );
 };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default boot(({ app, store }) => {
+export default boot(async ({app, store}) => {
   SessionStorageService.initNewTabStorage()
   // Applies pinia store on app now because initAxiosInstance needs it
   app.use(createPinia()); // à priori il faut initialiser Pinia avant de pouvoir l'utiliser https://github.com/vuejs/pinia/discussions/553#discussion-3430247
 
   const userStore = useUserStore()
-  userStore.updateFromLocalStorage()
   const darkModeStore = useDarkModeStore();
-  darkModeStore.updateFromLocalStorage()
   app.use(store);
 
   // Initialize the axiosApi instance that will be used by all the API services
@@ -80,7 +75,10 @@ export default boot(({ app, store }) => {
 
   sessionStorageService = new SessionStorageService()
   userService = new UserService();
+  stockService = new StockService();
   apiService = new ApiService(axiosInstance);
+  darkModeStore.updateFromLocalStorage()
+  await userStore.updateFromLocalStorage()
 });
 
-export { firebaseApp, firebaseDatabase, apiService, sessionStorageService, userService };
+export {firebaseApp, firebaseDatabase, apiService, sessionStorageService, userService, stockService};
