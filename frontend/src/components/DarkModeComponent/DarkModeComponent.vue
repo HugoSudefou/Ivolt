@@ -1,12 +1,9 @@
 <template>
     <q-toggle
-      class="absolute-right"
-      label="Dark theme"
+      :label="darkMode ? 'Dark theme' : 'Light theme'"
       v-model="darkMode"
       :options="[{ label: 'Sombre', value: false }, { label: 'Clair', value: true }]"
       @update:model-value="toggleDarkMode"
-      flat
-      dense
     />
 </template>
 

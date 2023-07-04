@@ -12,6 +12,8 @@ import { useSpinnerStore } from 'stores/spinner';
 import {ApiService} from "src/services/apis/api.service";
 import {SessionStorageService} from "src/services/common/session-storage.service";
 import {UserService} from "src/services/apis/user.service";
+import {useUserStore} from "stores/user";
+import {useDarkModeStore} from "stores/dark-mode";
 
 let axiosInstance: AxiosInstance;
 let apiService: ApiService;
@@ -59,6 +61,11 @@ export default boot(({ app, store }) => {
   SessionStorageService.initNewTabStorage()
   // Applies pinia store on app now because initAxiosInstance needs it
   app.use(createPinia()); // à priori il faut initialiser Pinia avant de pouvoir l'utiliser https://github.com/vuejs/pinia/discussions/553#discussion-3430247
+
+  const userStore = useUserStore()
+  userStore.updateFromLocalStorage()
+  const darkModeStore = useDarkModeStore();
+  darkModeStore.updateFromLocalStorage()
   app.use(store);
 
   // Initialize the axiosApi instance that will be used by all the API services

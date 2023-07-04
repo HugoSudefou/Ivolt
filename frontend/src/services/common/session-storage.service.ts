@@ -12,14 +12,13 @@ export class SessionStorageService {
   }
 
   public isConnected (): boolean {
-    const isConnected = localStorage.getItem('connected') !== null && localStorage.getItem('connected') === 'true';
-    if(isConnected && !useUserStore().updated) {
+    return localStorage.getItem('connected') !== null && localStorage.getItem('connected') === 'true';
+    /*if(isConnected && !useUserStore().updated) {
       const user = this.getIvUserData();
       if(user) {
         useUserStore().setUser(user)
       }
-    }
-    return isConnected
+    }*/
   }
 
   public getIvUserData (): IUserDto | null {

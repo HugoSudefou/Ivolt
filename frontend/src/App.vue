@@ -20,7 +20,7 @@ export default {
 </script>
 <style lang="scss">
 .dark-mode {
-  background-color: $dark-page;
-  color: $jaune-ivolt;
+  background-color: $dark !important;
+  color: $jaune-ivolt !important;;
 }
 </style>

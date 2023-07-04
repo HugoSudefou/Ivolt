@@ -1,6 +1,6 @@
-import { useQuasar } from 'quasar';
 import {computed, defineComponent, onMounted, ref} from 'vue';
 import {useDarkModeStore} from "stores/dark-mode";
+
 export default defineComponent({
   name: 'DarkModeComponent',
   setup() {
@@ -8,7 +8,6 @@ export default defineComponent({
     const darkMode = ref<boolean>(false)
 
     function toggleDarkMode(isDark: any) {
-      console.log('--isLight ! ', isDark)
       darkModeStore.switchDarkMode(isDark)
     }
 
