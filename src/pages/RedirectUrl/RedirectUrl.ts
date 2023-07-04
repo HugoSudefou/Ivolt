@@ -5,7 +5,7 @@ import {sessionStorageService, userService} from "boot/iv-api";
 import {useUserStore} from "stores/user";
 import {displayNotification} from "src/services/common/notification.service";
 import {NotificationStatusEnum} from "src/common/enums";
-import Loader from "components/LoaderComponent/LoaderComponent.vue";
+import Loader from "components/common/LoaderComponent/LoaderComponent.vue";
 
 export default defineComponent({
   name: 'RedirectUrl',

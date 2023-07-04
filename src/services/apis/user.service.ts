@@ -64,6 +64,17 @@ export class UserService extends AbstractFirebaseService<IUserDto> {
   }
 
   /**
+   * Function qui récupère sur firebase tous les utilisateurs
+   */
+  public async getAllUser(): Promise<WorkDone<IUserDto[]>> {
+    const allUser = await this.getAll();
+    if (allUser.length > 0) {
+      return WorkDone.buildOk(allUser.map(convertUserToIUserDto), MessageEnum.IS_OK_GET_ALL_USER);
+    }
+    return WorkDone.buildError(MessageEnum.IS_NOK_GET_ALL_USER);
+  }
+
+  /**
    * Permet de faire une requête sur firebase (sur la table user uniquement) avec un seul champ dans le where
    * @param whereData {WhereFirestore}
    */
