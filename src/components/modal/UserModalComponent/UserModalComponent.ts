@@ -1,6 +1,6 @@
 import {computed, defineComponent, PropType} from 'vue';
 import {IUserDto} from "src/common/dtos";
-import DarkModeComponent from "components/DarkModeComponent/DarkModeComponent.vue";
+import DarkModeComponent from "components/common/DarkModeComponent/DarkModeComponent.vue";
 import {useDarkModeStore} from "stores/dark-mode";
 
 export default defineComponent({

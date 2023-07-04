@@ -1,7 +1,7 @@
 import { useQuasar } from 'quasar';
 import {computed, defineComponent, onMounted, ref} from 'vue';
 import {useDarkModeStore} from "stores/dark-mode";
-import DarkModeComponent from "components/DarkModeComponent/DarkModeComponent.vue";
+import DarkModeComponent from "components/common/DarkModeComponent/DarkModeComponent.vue";
 
 export default defineComponent({
   name: 'LoginLayout',
