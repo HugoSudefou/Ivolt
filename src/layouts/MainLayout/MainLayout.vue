@@ -1,7 +1,7 @@
 <template>
-<!-- ancien lHh Lpr lFf-->
-<!-- nouveau hHh Lpr lff-->
-  <q-layout view="hHh Lpr lff" container style="height: 100Vh">
+  <!-- ancien lHh Lpr lFf-->
+  <!-- nouveau hHh Lpr lff-->
+  <q-layout view="hHh Lpr lff" container style="height: 100vh">
     <q-header elevated :class="{ 'dark-mode': isDarkMode }">
       <q-toolbar>
         <q-btn
@@ -23,7 +23,7 @@
       </q-toolbar>
     </q-header>
 
-<!--    <q-drawer
+    <!--    <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
@@ -48,12 +48,10 @@
       v-model="leftDrawerOpen"
       show-if-above
       overlay
-
       :mini="miniState"
       @mouseover="miniState = false"
       @mouseout="miniState = true"
       mini-to-overlay
-
       bordered
       :dark="isDarkMode"
     >
@@ -75,7 +73,6 @@
         </q-list>
       </q-scroll-area>
     </q-drawer>
-
 
     <q-page-container>
       <router-view />

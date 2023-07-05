@@ -1,9 +1,12 @@
-import {apiService} from 'boot/iv-api';
-import {DiscordTokenDtos, GuildMemberDiscodDtos} from "src/common/dtos/discord.dtos";
-import {WorkDone} from "src/common/utils";
-import {displayNotification} from "src/services/common/notification.service";
-import {NotificationStatusEnum} from "src/common/enums";
-import {MessageEnum} from "src/common/enums/message.enum";
+import { apiService } from 'boot/iv-api';
+import {
+  DiscordTokenDtos,
+  GuildMemberDiscodDtos,
+} from 'src/common/dtos/discord.dtos';
+import { WorkDone } from 'src/common/utils';
+import { displayNotification } from 'src/services/common/notification.service';
+import { NotificationStatusEnum } from 'src/common/enums';
+import { MessageEnum } from 'src/common/enums/message.enum';
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -18,7 +21,9 @@ export function getAuthorizationUrl(): string {
   )}`;
 }
 
-export async function exchangeCodeForToken(code: string): Promise<WorkDone<DiscordTokenDtos | undefined>> {
+export async function exchangeCodeForToken(
+  code: string,
+): Promise<WorkDone<DiscordTokenDtos | undefined>> {
   const data = {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
@@ -40,15 +45,14 @@ export async function exchangeCodeForToken(code: string): Promise<WorkDone<Disco
     urlParameters,
     {
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
     },
-    {successMessage, warningMessage}
+    { successMessage, warningMessage },
   );
 }
 
 export async function getUserGuilds(accessToken: string) {
-
   const successMessage = 'guild get with succes';
   const warningMessage = null;
 
@@ -60,7 +64,7 @@ export async function getUserGuilds(accessToken: string) {
         Authorization: `Bearer ${accessToken}`,
       },
     },
-    {successMessage, warningMessage}
+    { successMessage, warningMessage },
   );
 }
 
@@ -68,6 +72,13 @@ export function isUserHasRoleIVolt(guildMe: GuildMemberDiscodDtos) {
   const isRoleIVolt = guildMe.roles.find(
     (role) => role === process.env.ROLE_IVOLT_ID,
   );
-  displayNotification(!!isRoleIVolt ? NotificationStatusEnum.SUCCESS : NotificationStatusEnum.FAILURE, !!isRoleIVolt ? MessageEnum.IS_OK_IS_USER_HAS_ROLE_IVOLT : MessageEnum.IS_NOK_IS_USER_HAS_ROLE_IVOLT)
+  displayNotification(
+    !!isRoleIVolt
+      ? NotificationStatusEnum.SUCCESS
+      : NotificationStatusEnum.FAILURE,
+    !!isRoleIVolt
+      ? MessageEnum.IS_OK_IS_USER_HAS_ROLE_IVOLT
+      : MessageEnum.IS_NOK_IS_USER_HAS_ROLE_IVOLT,
+  );
   return !!isRoleIVolt;
 }

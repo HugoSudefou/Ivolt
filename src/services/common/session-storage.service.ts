@@ -1,43 +1,46 @@
-import {useUserStore} from 'stores/user'
-import {IUserDto} from "src/common/dtos";
+import { useUserStore } from 'stores/user';
+import { IUserDto } from 'src/common/dtos';
 
 export class SessionStorageService {
-  static initNewTabStorage () {
+  static initNewTabStorage() {
     window.addEventListener('storage', (event) => {
       if (event.key == 'connected') {
-        useUserStore().updated = true
+        useUserStore().updated = true;
       }
-    })
+    });
   }
 
-  public isConnected (): boolean {
-    return localStorage.getItem('connected') !== null && localStorage.getItem('connected') === 'true';
+  public isConnected(): boolean {
+    return (
+      localStorage.getItem('connected') !== null &&
+      localStorage.getItem('connected') === 'true'
+    );
   }
 
-  public getIvUserData (): IUserDto | null {
-    const ivUserS = localStorage.getItem('IVoltUser')
+  public getIvUserData(): IUserDto | null {
+    const ivUserS = localStorage.getItem('IVoltUser');
     if (ivUserS) {
-      return JSON.parse(ivUserS) as IUserDto
+      return JSON.parse(ivUserS) as IUserDto;
     }
-    return null
+    return null;
   }
 
-  public removeIvUserData () {
-    localStorage.removeItem('IVoltUser')
+  public removeIvUserData() {
+    localStorage.removeItem('IVoltUser');
   }
 
-  public logout () {
-    this.removeIvUserData()
-    localStorage.setItem('connected', String(false))
+  public logout() {
+    this.removeIvUserData();
+    localStorage.setItem('connected', String(false));
   }
 
-  public setIvUserData (ivUserData: IUserDto) {
-    localStorage.setItem('IVoltUser', JSON.stringify(ivUserData))
-    localStorage.setItem('connected', String(true))
+  public setIvUserData(ivUserData: IUserDto) {
+    localStorage.setItem('IVoltUser', JSON.stringify(ivUserData));
+    localStorage.setItem('connected', String(true));
   }
 
-  public setData (user: IUserDto) {
-    const data = this.getIvUserData()
+  public setData(user: IUserDto) {
+    const data = this.getIvUserData();
 
     const ivUserData: IUserDto = {
       id: user.id ?? data?.id,
@@ -50,7 +53,7 @@ export class SessionStorageService {
       phoneNumber: user.phoneNumber ?? data?.phoneNumber,
       usernameDiscord: user.usernameDiscord ?? data?.usernameDiscord,
       refreshToken: user.refreshToken ?? data?.refreshToken,
-    }
-    localStorage.setItem('IVoltUser', JSON.stringify(ivUserData))
+    };
+    localStorage.setItem('IVoltUser', JSON.stringify(ivUserData));
   }
 }

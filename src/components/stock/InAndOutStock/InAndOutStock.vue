@@ -1,8 +1,5 @@
 <template>
-  <q-form
-    class="contact-form q-gutter-y-xs"
-    @submit="onSubmit">
-
+  <q-form class="contact-form q-gutter-y-xs" @submit="onSubmit">
     <q-select
       :dark="isDarkMode"
       v-model="formTransactionStock.action"
@@ -46,18 +43,17 @@
     >
       <template v-slot:no-option>
         <q-item>
-          <q-item-section class="text-grey">
-            No results
-          </q-item-section>
+          <q-item-section class="text-grey"> No results </q-item-section>
         </q-item>
       </template>
     </q-select>
 
-
-    <q-btn class="full-width q-mt-lg"
-           label="Enregistrement d'un stock"
-           :loading="isLoading"
-           type="submit" />
+    <q-btn
+      class="full-width q-mt-lg"
+      label="Enregistrement d'un stock"
+      :loading="isLoading"
+      type="submit"
+    />
   </q-form>
 </template>
 

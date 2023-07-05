@@ -1,5 +1,5 @@
-import {defineComponent, PropType, ref} from "vue";
-import {IEssentialLinkDtos} from "src/common/dtos";
+import { defineComponent, PropType, ref } from 'vue';
+import { IEssentialLinkDtos } from 'src/common/dtos';
 
 export default defineComponent({
   name: 'EssentialLink',
@@ -7,12 +7,11 @@ export default defineComponent({
     essentialLinks: {
       type: Object as PropType<IEssentialLinkDtos>,
       required: true,
-    }
+    },
   },
-  setup () {
-
+  setup() {
     return {
-      test: ref(false)
-    }
-  }
+      test: ref(false),
+    };
+  },
 });

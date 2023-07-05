@@ -1,33 +1,39 @@
 <template>
   <div class="q-pa-md">
-    <q-btn flat round dense :style="{ color: user.dispatch.color }" icon="person">
+    <q-btn
+      flat
+      round
+      dense
+      :style="{ color: user.dispatch.color }"
+      icon="person"
+    >
       <q-menu
         :dark="isDarkMode"
         transition-show="jump-down"
         transition-hide="jump-up"
       >
         <div>
-          <div class="row items-center, q-pa-md">
-            <div class="column q-pr-md">
+          <div class="row items-center q-pa-md">
+            <div class="q-pr-md">
               <div>
                 <DarkModeComponent />
               </div>
-              <div>
-                Rang: {{ rang }}
-              </div>
-              <div>
-                Dispatch: {{ dispatch }}
-              </div>
+              <div>Rang: {{ rang }}</div>
+              <div>Dispatch: {{ dispatch }}</div>
             </div>
 
-            <q-separator vertical inset class="q-mx-lg" />
+            <q-separator vertical inset class="q-mx-md" />
 
-            <div class="column items-center">
+            <div class="items-center q-pa-md">
               <q-avatar size="72px">
-                <img src="https://wiki.21jumpclick.fr/images/2/25/I-volt_logo.png">
+                <img
+                  src="https://wiki.21jumpclick.fr/images/2/25/I-volt_logo.png"
+                />
               </q-avatar>
 
-              <div class="q-mt-md q-mb-sm">{{ user.firstName }} {{ user.lastName }}</div>
+              <div class="q-mt-md q-mb-sm">
+                {{ user.firstName }} {{ user.lastName }}
+              </div>
 
               <q-btn
                 color="primary"

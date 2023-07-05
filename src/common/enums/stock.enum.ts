@@ -1,4 +1,4 @@
 export enum ITypeActionStockEnum {
-  ENTREE= 'Entrée',
-  SORTIE= 'Sortie'
+  ENTREE = 'Entrée',
+  SORTIE = 'Sortie',
 }

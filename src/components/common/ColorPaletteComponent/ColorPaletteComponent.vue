@@ -5,7 +5,12 @@
     </div>
     <div class="color-palette">
       <div v-for="color in colors" :key="color" class="color-option">
-        <q-btn no-caps class="full-height full-width" :color="color" @click="selectColor(color)"></q-btn>
+        <q-btn
+          no-caps
+          class="full-height full-width"
+          :color="color"
+          @click="selectColor(color)"
+        ></q-btn>
       </div>
     </div>
   </div>

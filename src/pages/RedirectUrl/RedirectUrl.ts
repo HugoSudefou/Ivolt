@@ -1,16 +1,20 @@
-import {computed, defineComponent, onMounted, ref} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
-import {exchangeCodeForToken, getUserGuilds, isUserHasRoleIVolt} from 'src/services/apis/discord.service';
-import {sessionStorageService, userService} from "boot/iv-api";
-import {useUserStore} from "stores/user";
-import {displayNotification} from "src/services/common/notification.service";
-import {NotificationStatusEnum} from "src/common/enums";
-import Loader from "components/common/LoaderComponent/LoaderComponent.vue";
-import {useDarkModeStore} from "stores/dark-mode";
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import {
+  exchangeCodeForToken,
+  getUserGuilds,
+  isUserHasRoleIVolt,
+} from 'src/services/apis/discord.service';
+import { sessionStorageService, userService } from 'boot/iv-api';
+import { useUserStore } from 'stores/user';
+import { displayNotification } from 'src/services/common/notification.service';
+import { NotificationStatusEnum } from 'src/common/enums';
+import Loader from 'components/common/LoaderComponent/LoaderComponent.vue';
+import { useDarkModeStore } from 'stores/dark-mode';
 
 export default defineComponent({
   name: 'RedirectUrl',
-  components: {Loader},
+  components: { Loader },
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -24,7 +28,8 @@ export default defineComponent({
         textToDisplay.value = 'Oh on viens de récupérer ton token';
         const wdGuild = await getUserGuilds(wdToken.data?.access_token);
         if (wdGuild.isOk && wdGuild.data) {
-          textToDisplay.value = 'Oh on viens de récupérer le discord, on vérifie que tu ai bien les droits';
+          textToDisplay.value =
+            'Oh on viens de récupérer le discord, on vérifie que tu ai bien les droits';
           if (isUserHasRoleIVolt(wdGuild.data)) {
             if (wdGuild.data.user && wdGuild.data.user.username) {
               let firstName = '';
@@ -34,21 +39,30 @@ export default defineComponent({
                 firstName = splitNickNameDiscord[0];
                 lastName = splitNickNameDiscord[1];
               }
-              const wdUser = await userService.getOrCreateUserByUsernameDiscord(wdGuild.data.user.username + '1', wdGuild.data.user.avatar, firstName, lastName, wdToken.data.refresh_token)
+              const wdUser = await userService.getOrCreateUserByUsernameDiscord(
+                wdGuild.data.user.username + '1',
+                wdGuild.data.user.avatar,
+                firstName,
+                lastName,
+                wdToken.data.refresh_token,
+              );
               if (wdUser.isOk && wdUser.data) {
                 if (wdUser.successMessage) {
-                  displayNotification(NotificationStatusEnum.SUCCESS, wdUser.successMessage)
+                  displayNotification(
+                    NotificationStatusEnum.SUCCESS,
+                    wdUser.successMessage,
+                  );
                 }
                 sessionStorageService.setIvUserData(wdUser.data);
                 userStore.setUser(wdUser.data);
-                router.push('/')
+                router.push('/');
                 return;
               }
             }
           }
         }
       }
-      router.push('/login')
+      router.push('/login');
     }
 
     onMounted(async () => {
@@ -58,13 +72,13 @@ export default defineComponent({
       } else {
         const error = route.query.error;
         if (error) {
-          router.push('/login')
+          router.push('/login');
         }
       }
     });
     return {
       isDarkMode: computed(() => darkModeStore.isDarkMode),
-      textToDisplay
+      textToDisplay,
     };
   },
 });

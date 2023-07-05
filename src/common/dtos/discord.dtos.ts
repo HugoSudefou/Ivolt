@@ -44,11 +44,11 @@ export interface GuildMemberDiscodDtos {
   avatar?: string;
   roles: string[];
   joined_at: number;
-  premium_since?:	number;
+  premium_since?: number;
   deaf: boolean;
   mute: boolean;
   flags: number;
-  pending?:	boolean;
-  permissions?:	string;
+  pending?: boolean;
+  permissions?: string;
   communication_disabled_until?: number;
 }

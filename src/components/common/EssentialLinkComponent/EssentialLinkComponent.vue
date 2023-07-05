@@ -3,13 +3,10 @@
     clickable
     tag="a"
     target="_blank"
-    style="min-height: 60px;"
+    style="min-height: 60px"
     :href="essentialLinks.link"
   >
-    <q-item-section
-      v-if="essentialLinks.icon"
-      avatar
-    >
+    <q-item-section v-if="essentialLinks.icon" avatar>
       <q-icon :name="essentialLinks.icon" />
     </q-item-section>
 
@@ -20,8 +17,6 @@
   </q-item>
 </template>
 
-<script lang="ts" src="./EssentialLinkComponent.ts">
-
-</script>
+<script lang="ts" src="./EssentialLinkComponent.ts"></script>
 
 <style scoped lang="scss" src="./EssentialLinkComponent.scss"></style>

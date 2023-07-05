@@ -1,7 +1,7 @@
 export interface WhereFirestore {
-  field: string,
-  operator: any,
-  value: any
+  field: string;
+  operator: any;
+  value: any;
 }
 
 export interface IRangDto {
@@ -10,5 +10,5 @@ export interface IRangDto {
 
 export interface IDispatchDto {
   label: string;
-  color: string
+  color: string;
 }

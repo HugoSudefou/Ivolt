@@ -1,5 +1,5 @@
-import {IDispatchDto, IRangDto} from "src/common/dtos/firebase.dto";
-import {DocumentData, DocumentReference} from "firebase/firestore";
+import { IDispatchDto, IRangDto } from 'src/common/dtos/firebase.dto';
+import { DocumentData, DocumentReference } from 'firebase/firestore';
 
 export interface IUserDto {
   id: string;

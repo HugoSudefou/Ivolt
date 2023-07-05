@@ -1,6 +1,6 @@
-import {IUserDto} from "src/common/dtos/user.dtos";
-import {DocumentData, DocumentReference} from "firebase/firestore";
-import firebase from "firebase/compat";
+import { IUserDto } from 'src/common/dtos/user.dtos';
+import { DocumentData, DocumentReference } from 'firebase/firestore';
+import firebase from 'firebase/compat';
 import firestore = firebase.firestore;
 
 export interface IStockDtos {
@@ -22,5 +22,5 @@ export interface IFormTransactionStockDtos {
   action: string;
   date: number;
   nbBatterie: number | null;
-  user: { label: string, id: string };
+  user: { label: string; id: string };
 }

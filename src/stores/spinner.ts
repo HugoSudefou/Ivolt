@@ -1,31 +1,31 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useSpinnerStore = defineStore({
   id: 'spinner',
   state: () => ({
     isLoading: false,
-    pendingRequests: 0
+    pendingRequests: 0,
   }),
   actions: {
-    clear () {
+    clear() {
       this.$patch({
         isLoading: false,
-        pendingRequests: 0
-      })
+        pendingRequests: 0,
+      });
     },
-    incrementPendingRequests () {
+    incrementPendingRequests() {
       this.$patch({
         isLoading: true,
-        pendingRequests: this.pendingRequests + 1
-      })
+        pendingRequests: this.pendingRequests + 1,
+      });
     },
-    decrementPendingRequests () {
-      this.pendingRequests--
+    decrementPendingRequests() {
+      this.pendingRequests--;
       if (this.pendingRequests === 0) {
         this.$patch({
-          isLoading: false
-        })
+          isLoading: false,
+        });
       }
-    }
-  }
-})
+    },
+  },
+});

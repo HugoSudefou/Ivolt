@@ -1,50 +1,50 @@
-import {computed, defineComponent, ref} from 'vue';
-import {useUserStore} from "stores/user";
-import UserModalComponent from "components/modal/UserModalComponent/UserModalComponent.vue";
-import {sessionStorageService} from "boot/iv-api";
-import {useRouter} from "vue-router";
-import {useDarkModeStore} from "stores/dark-mode";
-import EssentialLink from "components/common/EssentialLinkComponent/EssentialLinkComponent.vue";
+import { computed, defineComponent, ref } from 'vue';
+import { useUserStore } from 'stores/user';
+import UserModalComponent from 'components/modal/UserModalComponent/UserModalComponent.vue';
+import { sessionStorageService } from 'boot/iv-api';
+import { useRouter } from 'vue-router';
+import { useDarkModeStore } from 'stores/dark-mode';
+import EssentialLink from 'components/common/EssentialLinkComponent/EssentialLinkComponent.vue';
 
 const linksList = [
   {
     title: 'Home',
     caption: 'quasar.dev',
     icon: 'home',
-    link: ''
+    link: '',
   },
   {
     title: 'Test',
     caption: 'test',
     icon: 'test',
-    link: '/test'
+    link: '/test',
   },
-]
+];
 
 const linksListAdmin = [
   {
     title: 'AdminHome',
     caption: 'quasar.dev',
     icon: 'home',
-    link: '/adminHome'
+    link: '/adminHome',
   },
-]
+];
 export default defineComponent({
   name: 'MainLayout',
-    components: {EssentialLink, UserModalComponent},
+  components: { EssentialLink, UserModalComponent },
   setup() {
     const version = process.env.VERSION_APPLI;
     const router = useRouter();
     const leftDrawerOpen = ref(false);
     const essentialLinks = ref(linksList);
     const essentialAdminLinks = ref(linksListAdmin);
-    const userStore = useUserStore()
-    const darkModeStore = useDarkModeStore()
-    const userProfileModalVisible = ref(false)
+    const userStore = useUserStore();
+    const darkModeStore = useDarkModeStore();
+    const userProfileModalVisible = ref(false);
 
     const openUserProfileModal = () => {
-      userProfileModalVisible.value = true
-    }
+      userProfileModalVisible.value = true;
+    };
     function toggleLeftDrawer() {
       leftDrawerOpen.value = !leftDrawerOpen.value;
     }
@@ -52,7 +52,7 @@ export default defineComponent({
     function logout() {
       sessionStorageService.logout();
       userStore.clear();
-      router.push('/login')
+      router.push('/login');
     }
 
     return {
@@ -67,7 +67,7 @@ export default defineComponent({
       openUserProfileModal,
       toggleLeftDrawer,
       drawer: ref(false),
-      miniState: ref(true)
+      miniState: ref(true),
     };
   },
 });

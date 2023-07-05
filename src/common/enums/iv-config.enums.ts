@@ -2,7 +2,7 @@ export enum NotificationStatusEnum {
   SUCCESS = 'positive',
   FAILURE = 'negative',
   WARNING = 'warning',
-  INFORMATIVE = 'info'
+  INFORMATIVE = 'info',
 }
 
 export enum HttpRequestEnum {
@@ -10,5 +10,5 @@ export enum HttpRequestEnum {
   POST = 'post',
   PUT = 'put',
   PATCH = 'patch',
-  DELETE = 'delete'
+  DELETE = 'delete',
 }
